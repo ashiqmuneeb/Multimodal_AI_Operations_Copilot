@@ -1,0 +1,81 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual & Conda Environments
+.venv/
+env/
+ENV/
+.conda/
+
+# Environment Variables & Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+
+# Databases & SQLite
+*.db
+*.sqlite
+*.sqlite3
+*.sqlite3-journal
+data/*
+!data/.gitkeep
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.bak
+*.tmp
+
+# Project Uploads & Data
+uploads/*
+!uploads/.gitkeep
+uploads/images/*
+!uploads/images/.gitkeep
+uploads/videos/*
+!uploads/videos/.gitkeep
+uploads/documents/*
+!uploads/documents/.gitkeep
+uploads/vector_store/*
+!uploads/vector_store/.gitkeep
+
+# Logs
+*.log
+logs/
+
+# Frontend (React & Node.js)
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
+frontend/.oxlintrc.json
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini

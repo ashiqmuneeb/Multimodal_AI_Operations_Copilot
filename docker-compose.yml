@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  ops-copilot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ops_copilot_service
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=production
+      - LLM_PROVIDER=mock
+      - DATABASE_URL=sqlite+aiosqlite:///./data/ops_agent.db
+      - JWT_SECRET=change-this-in-production-very-secret-key-32chars
+      - CORS_ORIGINS=["*"]
+    volumes:
+      - ops_data:/app/data
+      - ops_uploads:/app/uploads
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  ops_data:
+    driver: local
+  ops_uploads:
+    driver: local
