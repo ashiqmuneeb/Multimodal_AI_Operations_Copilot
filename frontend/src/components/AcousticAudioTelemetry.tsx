@@ -8,11 +8,11 @@ interface AcousticAudioTelemetryProps {
 
 export const AcousticAudioTelemetry: React.FC<AcousticAudioTelemetryProps> = ({ currentLang }) => {
   const [isPlayingAudio, setIsPlayingAudio] = useState<boolean>(false);
-  const [selectedSound, setSelectedSound] = useState<'normal' | 'bearing' | 'belt' | 'valve'>('bearing');
+  const [selectedSound, setSelectedSound] = useState<'normal' | 'bearing' | 'belt' | 'valve'>('normal');
 
   // Interactive Sensor Simulator State
-  const [simRpm, setSimRpm] = useState<number>(1480);
-  const [simLoad, setSimLoad] = useState<number>(85);
+  const [simRpm, setSimRpm] = useState<number>(1200);
+  const [simLoad, setSimLoad] = useState<number>(50);
 
   // Derived telemetry calculations
   const simTemp = Math.round(55 + (simRpm / 2200) * 35 + (simLoad / 100) * 15);
@@ -115,9 +115,9 @@ export const AcousticAudioTelemetry: React.FC<AcousticAudioTelemetryProps> = ({ 
         ctx.stroke();
       }
 
-      // Draw Waveform (Silver Platinum / Crimson Alarm)
+      // Draw Waveform (Cerulean Blue / Vibrant Red Alarm)
       ctx.lineWidth = 2;
-      ctx.strokeStyle = isAlarm ? '#f43f5e' : '#f1f5f9';
+      ctx.strokeStyle = isAlarm ? '#EF4444' : '#00a2db';
       ctx.beginPath();
 
       const baseFreq = isPlayingAudio ? (selectedSound === 'bearing' ? 8 : 4) : 2;
@@ -145,8 +145,8 @@ export const AcousticAudioTelemetry: React.FC<AcousticAudioTelemetryProps> = ({ 
         const by = h - barH;
 
         const grad = ctx.createLinearGradient(bx, by, bx, h);
-        grad.addColorStop(0, isAlarm ? '#f43f5e' : '#e2e8f0');
-        grad.addColorStop(1, 'rgba(148, 163, 184, 0.12)');
+        grad.addColorStop(0, isAlarm ? '#EF4444' : '#007BA7');
+        grad.addColorStop(1, 'rgba(0, 123, 167, 0.1)');
 
         ctx.fillStyle = grad;
         ctx.fillRect(bx, by, barW, barH);
@@ -230,7 +230,7 @@ export const AcousticAudioTelemetry: React.FC<AcousticAudioTelemetryProps> = ({ 
             style={{
               width: '100%',
               height: '130px',
-              background: '#090a0f',
+              background: '#0A0A0A',
               borderRadius: 'var(--radius-sm)',
               border: '1px solid var(--border-card)'
             }}
@@ -238,7 +238,7 @@ export const AcousticAudioTelemetry: React.FC<AcousticAudioTelemetryProps> = ({ 
 
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.6rem', fontSize: '0.74rem', color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>
             <span>SPECTRAL DOMAIN: 20 Hz - 2.4 kHz</span>
-            <span style={{ color: isAlarm ? '#f43f5e' : 'var(--primary-cyan)', fontWeight: 700 }}>
+            <span style={{ color: isAlarm ? '#EF4444' : 'var(--primary-cyan)', fontWeight: 700 }}>
               AI STATUS: {selectedSound === 'bearing' ? '⚠️ ANOMALOUS HARMONIC PEAK DETECTED' : 'NORMAL HARMONIC'}
             </span>
           </div>
@@ -259,7 +259,7 @@ export const AcousticAudioTelemetry: React.FC<AcousticAudioTelemetryProps> = ({ 
               : 'Live Sensor Telemetry Simulator'}
           </div>
           {isAlarm && (
-            <span className="badge-confidence" style={{ background: 'rgba(244, 63, 94, 0.2)', color: '#fecdd3', border: '1px solid #f43f5e' }}>
+            <span className="badge-confidence" style={{ background: 'rgba(239, 68, 68, 0.2)', color: '#fca5a5', border: '1px solid #EF4444', boxShadow: '0 0 10px rgba(239, 68, 68, 0.4)' }}>
               CRITICAL ALARM
             </span>
           )}
@@ -303,35 +303,35 @@ export const AcousticAudioTelemetry: React.FC<AcousticAudioTelemetryProps> = ({ 
 
           {/* Dynamic Calculated Gauges */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.65rem', marginTop: '0.85rem' }}>
-            <div style={{ background: '#090a0f', padding: '0.65rem', borderRadius: 'var(--radius-xs)', border: '1px solid var(--border-card)', textAlign: 'center' }}>
+            <div style={{ background: '#0A0A0A', padding: '0.65rem', borderRadius: 'var(--radius-xs)', border: '1px solid var(--border-card)', textAlign: 'center' }}>
               <div style={{ fontSize: '0.68rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Bearing Temp</div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 800, color: simTemp > 85 ? '#f43f5e' : '#34d399', fontFamily: 'var(--font-mono)' }}>
+              <div style={{ fontSize: '1.25rem', fontWeight: 800, color: simTemp > 85 ? '#EF4444' : '#10b981', fontFamily: 'var(--font-mono)' }}>
                 {simTemp}°C
               </div>
             </div>
 
-            <div style={{ background: '#090a0f', padding: '0.65rem', borderRadius: 'var(--radius-xs)', border: '1px solid var(--border-card)', textAlign: 'center' }}>
+            <div style={{ background: '#0A0A0A', padding: '0.65rem', borderRadius: 'var(--radius-xs)', border: '1px solid var(--border-card)', textAlign: 'center' }}>
               <div style={{ fontSize: '0.68rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Vibration</div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 800, color: simVibration > 4.5 ? '#f59e0b' : '#34d399', fontFamily: 'var(--font-mono)' }}>
+              <div style={{ fontSize: '1.25rem', fontWeight: 800, color: simVibration > 4.5 ? '#f59e0b' : '#00a2db', fontFamily: 'var(--font-mono)' }}>
                 {simVibration} mm/s
               </div>
             </div>
 
-            <div style={{ background: '#090a0f', padding: '0.65rem', borderRadius: 'var(--radius-xs)', border: '1px solid var(--border-card)', textAlign: 'center' }}>
+            <div style={{ background: '#0A0A0A', padding: '0.65rem', borderRadius: 'var(--radius-xs)', border: '1px solid var(--border-card)', textAlign: 'center' }}>
               <div style={{ fontSize: '0.68rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Power Draw</div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#f1f5f9', fontFamily: 'var(--font-mono)' }}>
+              <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#f8fafc', fontFamily: 'var(--font-mono)' }}>
                 {Math.round(45 + (simLoad / 100) * 105)} kW
               </div>
             </div>
           </div>
 
           {/* ISO-10816 Machine Vibration Severity Band */}
-          <div style={{ marginTop: '0.85rem', padding: '0.65rem 0.85rem', background: '#090a0f', borderRadius: 'var(--radius-xs)', border: '1px solid var(--border-card)' }}>
+          <div style={{ marginTop: '0.85rem', padding: '0.65rem 0.85rem', background: '#0A0A0A', borderRadius: 'var(--radius-xs)', border: '1px solid var(--border-card)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem', fontSize: '0.74rem' }}>
               <span style={{ color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>ISO 10816-3 SEVERITY STATUS:</span>
               <span style={{
                 fontWeight: 800,
-                color: simVibration <= 2.8 ? '#34d399' : simVibration <= 4.5 ? '#cbd5e1' : simVibration <= 7.1 ? '#fbbf24' : '#f43f5e'
+                color: simVibration <= 2.8 ? '#10b981' : simVibration <= 4.5 ? '#00a2db' : simVibration <= 7.1 ? '#f59e0b' : '#EF4444'
               }}>
                 {simVibration <= 2.8 ? 'ZONE A (GOOD)' : simVibration <= 4.5 ? 'ZONE B (ACCEPTABLE)' : simVibration <= 7.1 ? 'ZONE C (ALERT / CHECK REQUIRED)' : 'ZONE D (DANGER / SHUTDOWN)'}
               </span>
@@ -339,9 +339,9 @@ export const AcousticAudioTelemetry: React.FC<AcousticAudioTelemetryProps> = ({ 
             {/* Visual Risk Bar */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '4px', height: '6px', borderRadius: '4px', overflow: 'hidden' }}>
               <div style={{ background: '#10b981', opacity: simVibration <= 2.8 ? 1 : 0.35 }} />
-              <div style={{ background: '#94a3b8', opacity: simVibration > 2.8 && simVibration <= 4.5 ? 1 : 0.35 }} />
+              <div style={{ background: '#007BA7', opacity: simVibration > 2.8 && simVibration <= 4.5 ? 1 : 0.45 }} />
               <div style={{ background: '#f59e0b', opacity: simVibration > 4.5 && simVibration <= 7.1 ? 1 : 0.35 }} />
-              <div style={{ background: '#f43f5e', opacity: simVibration > 7.1 ? 1 : 0.35 }} />
+              <div style={{ background: '#EF4444', opacity: simVibration > 7.1 ? 1 : 0.35 }} />
             </div>
           </div>
         </div>

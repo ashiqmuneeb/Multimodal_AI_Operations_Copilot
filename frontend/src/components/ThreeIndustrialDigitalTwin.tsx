@@ -112,7 +112,7 @@ export const ThreeIndustrialDigitalTwin: React.FC<ThreeIndustrialDigitalTwinProp
     });
 
     const defectRedMat = new THREE.MeshBasicMaterial({
-      color: 0xf43f5e
+      color: 0xef4444
     });
 
     const defectAmberMat = new THREE.MeshBasicMaterial({
@@ -823,8 +823,8 @@ export const ThreeIndustrialDigitalTwin: React.FC<ThreeIndustrialDigitalTwinProp
               width: 7,
               height: 7,
               borderRadius: '50%',
-              backgroundColor: isExploded ? '#f43f5e' : '#38bdf8',
-              boxShadow: `0 0 8px ${isExploded ? '#f43f5e' : '#38bdf8'}`,
+              backgroundColor: isExploded ? '#ef4444' : '#38bdf8',
+              boxShadow: `0 0 8px ${isExploded ? '#ef4444' : '#38bdf8'}`,
               display: 'inline-block'
             }}
           />
@@ -850,9 +850,9 @@ export const ThreeIndustrialDigitalTwin: React.FC<ThreeIndustrialDigitalTwinProp
           <button
             onClick={() => setIsExploded((prev) => !prev)}
             style={{
-              background: isExploded ? 'rgba(244, 63, 94, 0.25)' : 'rgba(56, 189, 248, 0.15)',
-              border: `1px solid ${isExploded ? '#f43f5e' : '#38bdf8'}`,
-              color: isExploded ? '#fecdd3' : '#bae6fd',
+              background: isExploded ? 'rgba(239, 68, 68, 0.25)' : 'rgba(56, 189, 248, 0.15)',
+              border: `1px solid ${isExploded ? '#ef4444' : '#38bdf8'}`,
+              color: isExploded ? '#fca5a5' : '#bae6fd',
               fontSize: '0.7rem',
               fontFamily: 'var(--font-mono)',
               fontWeight: 700,
@@ -930,9 +930,9 @@ export const ThreeIndustrialDigitalTwin: React.FC<ThreeIndustrialDigitalTwinProp
               <button
                 onClick={() => onSelectHotspot && onSelectHotspot('pump')}
                 style={{
-                  background: 'rgba(244, 63, 94, 0.2)',
-                  border: '1px solid #f43f5e',
-                  color: '#fecdd3',
+                  background: 'rgba(239, 68, 68, 0.2)',
+                  border: '1px solid #ef4444',
+                  color: '#fca5a5',
                   fontSize: '0.68rem',
                   fontFamily: 'var(--font-mono)',
                   fontWeight: 700,
@@ -955,9 +955,9 @@ export const ThreeIndustrialDigitalTwin: React.FC<ThreeIndustrialDigitalTwinProp
               <button
                 onClick={() => onSelectHotspot && onSelectHotspot('motor')}
                 style={{
-                  background: 'rgba(244, 63, 94, 0.25)',
-                  border: '1px solid #f43f5e',
-                  color: '#fecdd3',
+                  background: 'rgba(239, 68, 68, 0.25)',
+                  border: '1px solid #ef4444',
+                  color: '#fca5a5',
                   fontSize: '0.68rem',
                   fontFamily: 'var(--font-mono)',
                   fontWeight: 700,
@@ -967,7 +967,7 @@ export const ThreeIndustrialDigitalTwin: React.FC<ThreeIndustrialDigitalTwinProp
                   display: 'flex',
                   alignItems: 'center',
                   gap: '5px',
-                  boxShadow: '0 0 12px rgba(244, 63, 94, 0.3)'
+                  boxShadow: '0 0 12px rgba(239, 68, 68, 0.3)'
                 }}
                 title="Diagnose Motor Drive-End Bearing Hotspot"
               >

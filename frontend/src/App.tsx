@@ -14,14 +14,12 @@ import {
   Sparkles,
   Terminal,
   Activity,
-  Cpu,
   RefreshCw,
   SlidersHorizontal,
   ChevronRight,
   Hash,
   AlertTriangle,
   Factory,
-  Gauge,
   CheckCheck,
   Camera,
   Mic,
@@ -35,6 +33,7 @@ import {
 import { translations, type SupportedLanguage } from './i18n';
 import { ThreeIndustrialDigitalTwin } from './components/ThreeIndustrialDigitalTwin';
 import { AcousticAudioTelemetry } from './components/AcousticAudioTelemetry';
+import { SynapseLogo } from './components/SynapseLogo';
 
 interface ToolTrace {
   tool_name: string;
@@ -113,7 +112,6 @@ export default function App() {
 
   // Permanent Silver & Black Enterprise Theme
   const activeTheme = 'silver';
-  const [activeSector, setActiveSector] = useState<string>('B');
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', 'silver');
@@ -174,9 +172,9 @@ export default function App() {
   const [selectedEquipment, setSelectedEquipment] = useState(initialProfiles[0]);
   const [equipmentId, setEquipmentId] = useState<string>(initialProfiles[0].id);
   const [severityLevel, setSeverityLevel] = useState<string>(initialProfiles[0].severity);
-  const [agentRequest, setAgentRequest] = useState<string>(initialProfiles[0].notes);
+  const [agentRequest, setAgentRequest] = useState<string>('');
   const [agentFile, setAgentFile] = useState<File | null>(null);
-  const [agentPreview, setAgentPreview] = useState<string | null>(initialProfiles[0].image);
+  const [agentPreview, setAgentPreview] = useState<string | null>(null);
   const [selectedDocId, setSelectedDocId] = useState<string>('');
 
   const [agentLoading, setAgentLoading] = useState<boolean>(false);
@@ -191,13 +189,13 @@ export default function App() {
 
   // Video State
   const [videoFile, setVideoFile] = useState<File | null>(null);
-  const [videoNotes, setVideoNotes] = useState<string>('Roller vibrating and drifting axially at high speeds.');
+  const [videoNotes, setVideoNotes] = useState<string>('');
   const [videoLoading, setVideoLoading] = useState<boolean>(false);
   const [videoResult, setVideoResult] = useState<VideoInspectionResponse | null>(null);
 
   // Documents & RAG State
   const [documents, setDocuments] = useState<DocumentRecord[]>([]);
-  const [ragQuery, setRagQuery] = useState<string>(initialProfiles[0].query);
+  const [ragQuery, setRagQuery] = useState<string>('');
   const [ragHits, setRagHits] = useState<SearchHit[]>([]);
   const [ragSearching, setRagSearching] = useState<boolean>(false);
   const [ragMeta, setRagMeta] = useState<string>('');
@@ -212,8 +210,6 @@ export default function App() {
     const updatedProfiles = getProfiles(lang);
     const activeOne = updatedProfiles.find((p) => p.id === equipmentId) || updatedProfiles[0];
     setSelectedEquipment(activeOne);
-    setAgentRequest(activeOne.notes);
-    setRagQuery(activeOne.query);
   };
 
   // Voice Recording (Speech-to-Text)
@@ -412,10 +408,6 @@ export default function App() {
     setSelectedEquipment(eq);
     setEquipmentId(eq.id);
     setSeverityLevel(eq.severity);
-    setAgentRequest(eq.notes);
-    setAgentPreview(eq.image);
-    setAgentFile(null);
-    setRagQuery(eq.query);
     setHudMessage(`Loaded: ${eq.name} (${eq.id})`);
   };
 
@@ -559,24 +551,19 @@ export default function App() {
     setWorkflowStep(2);
   };
 
-  // 3D Card Tilt Mouse Physics
+  // Interactive Card Mouse Physics (3D tilt removed for stable industrial UX)
   const handleCardMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const card = e.currentTarget;
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    const rotateX = ((y - centerY) / centerY) * -8.5;
-    const rotateY = ((x - centerX) / centerX) * 8.5;
-    card.style.transform = `perspective(900px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateZ(8px)`;
     card.style.setProperty('--shine-x', `${(x / rect.width) * 100}%`);
     card.style.setProperty('--shine-y', `${(y / rect.height) * 100}%`);
   };
 
   const handleCardMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
     const card = e.currentTarget;
-    card.style.transform = `perspective(900px) rotateX(0deg) rotateY(0deg) translateZ(0px)`;
+    card.style.transform = 'none';
   };
 
   return (
@@ -591,7 +578,7 @@ export default function App() {
           onClick={() => setActiveView('home')}
         >
           <div className="brand-icon-gradient">
-            <Cpu size={20} />
+            <SynapseLogo size={24} />
           </div>
           <div className="brand-text-block">
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -683,36 +670,8 @@ export default function App() {
       <section className="hero-plant-banner" style={{ position: 'relative', zIndex: 5 }}>
         <div className="banner-left">
           <div className="plant-status-pill">
-            <Gauge size={14} />
-            <select
-              value={activeSector}
-              onChange={(e) => {
-                const s = e.target.value;
-                setActiveSector(s);
-                setHudMessage(
-                  s === 'B'
-                    ? 'Switched to Sector B: Active Line (Slurry Pumps & Drive Motors). Telemetry online.'
-                    : s === 'A'
-                    ? 'Switched to Sector A: Boiler Feed Line (Feed Pumps & Pre-heaters). Telemetry online.'
-                    : 'Switched to Sector C: Heavy Compressor Station (Rotary Air Loops). Telemetry online.'
-                );
-              }}
-              style={{
-                background: 'transparent',
-                border: 'none',
-                color: '#fff',
-                fontSize: '0.78rem',
-                fontWeight: 700,
-                cursor: 'pointer',
-                outline: 'none',
-                fontFamily: 'inherit'
-              }}
-              title="Click to Switch Plant Sector"
-            >
-              <option value="B" style={{ background: '#12141c', color: '#fff' }}>SECTOR B: ACTIVE LINE (PUMPS & MOTORS)</option>
-              <option value="A" style={{ background: '#12141c', color: '#fff' }}>SECTOR A: BOILER FEED LINE</option>
-              <option value="C" style={{ background: '#12141c', color: '#fff' }}>SECTOR C: COMPRESSOR BAY</option>
-            </select>
+            <Activity size={14} style={{ color: 'var(--cerulean-light)' }} />
+            <span>DIAGNOSTICS ONLINE</span>
           </div>
           <div className="hud-stream-text">
             <Terminal size={14} style={{ color: 'var(--primary-cyan)' }} />
@@ -731,6 +690,15 @@ export default function App() {
             className="btn-neutral-secondary"
             onClick={() => {
               setAgentState(null);
+              setAgentRequest('');
+              setVideoNotes('');
+              setRagQuery('');
+              setAgentFile(null);
+              setAgentPreview(null);
+              setCompletedChecks({});
+              setVideoResult(null);
+              setRagHits([]);
+              setRagMeta('');
               if ('speechSynthesis' in window) window.speechSynthesis.cancel();
               setIsPlayingAudio(false);
               setWorkflowStep(1);
@@ -785,10 +753,13 @@ export default function App() {
               <div className="hero-cta-group">
                 <button
                   className="btn-hero-launch"
-                  onClick={() => setActiveView('workbench')}
+                  onClick={() => {
+                    setActiveView('workbench');
+                    setWorkflowStep(2);
+                  }}
                 >
-                  <Wrench size={16} />
-                  <span>{t.box1_action}</span>
+                  <Upload size={16} />
+                  <span>Upload & Inspect Machine</span>
                   <ChevronRight size={16} />
                 </button>
                 <button
@@ -829,7 +800,7 @@ export default function App() {
               className="portal-feature-card card-variant-cyan tilt-card-3d"
               onClick={() => {
                 setActiveView('workbench');
-                setWorkflowStep(1);
+                setWorkflowStep(2);
               }}
               onMouseMove={handleCardMouseMove}
               onMouseLeave={handleCardMouseLeave}
@@ -1000,7 +971,19 @@ export default function App() {
                     {t.fleetSub}
                   </p>
                 </div>
-                <span className="badge-confidence">ISO-10816 PLANT FLEET</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                  <button
+                    className="btn-electric-primary"
+                    onClick={() => {
+                      setEquipmentId('CUSTOM-01');
+                      setWorkflowStep(2);
+                    }}
+                    style={{ padding: '0.45rem 0.95rem', fontSize: '0.8rem' }}
+                  >
+                    <Upload size={14} /> Upload Custom Machine Image →
+                  </button>
+                  <span className="badge-confidence">ISO-10816 PLANT FLEET</span>
+                </div>
               </div>
 
               {/* Equipment Grid Cards with 3D Tilt & Specular Shine */}
@@ -1212,7 +1195,7 @@ export default function App() {
                         </div>
                         <div style={{ flex: 1, minWidth: 0 }}>
                           <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-white)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                            {agentFile ? agentFile.name : `${selectedEquipment.name} Photo`}
+                            {agentFile ? agentFile.name : 'Select or Drop Machine Photo / Image'}
                           </div>
                           <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>
                             {t.photoDropSub}
@@ -1621,7 +1604,7 @@ export default function App() {
 
                         {/* Limitations Warning */}
                         {agentState.final_report.limitations.length > 0 && (
-                          <div style={{ borderLeft: '3px solid var(--rose-crimson)', background: 'rgba(244, 63, 94, 0.08)', padding: '0.85rem 1.15rem', borderRadius: 'var(--radius-sm)', fontSize: '0.82rem', color: '#fecdd3' }}>
+                          <div style={{ borderLeft: '3px solid var(--rose-crimson)', background: 'rgba(239, 68, 68, 0.08)', padding: '0.85rem 1.15rem', borderRadius: 'var(--radius-sm)', fontSize: '0.82rem', color: '#fca5a5' }}>
                             <div style={{ fontWeight: 700, marginBottom: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                               <ShieldAlert size={15} /> {t.safetyTitle}
                             </div>
@@ -1701,6 +1684,10 @@ export default function App() {
                   onClick={() => {
                     setWorkflowStep(1);
                     setAgentState(null);
+                    setAgentRequest('');
+                    setAgentFile(null);
+                    setAgentPreview(null);
+                    setCompletedChecks({});
                     setHudMessage('Ready for new inspection session.');
                   }}
                 >
